@@ -2,6 +2,9 @@ class Video < ApplicationRecord
   has_many :rentals
   has_many :customers, through: :rentals
 
+  validates :title, :overview, :release_date, :inventory, presence: true
+  validates :title, uniqueness: { scope: :release_date }
+
   def available_inventory
     self.inventory - self.rentals.where(returned: false).length
   end

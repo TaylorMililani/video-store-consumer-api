@@ -78,25 +78,45 @@ class VideosControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # describe "create" do
-  #   it "creates a new movie and adds it to db" do
-  #     # Arrange
-  #     video_hash = {
-  #         # video: {
-  #         title: "Alf the movie",
-  #         overview: "The most early 90s movie of all time",
-  #         release_date: "2025-12-16",
-  #         image_url: "image",
-  #         external_id: 9000
-  #         # }
-  #     }
-  #
-  #     # Assert
-  #     expect {
-  #       post videos_path, params: video_hash
-  #     }.must_change "Video.count", 1
-  #
-  #     must_respond_with :ok
-  #   end
-  # end
+  describe "create" do
+    it "creates a new movie and adds it to db" do
+      # Arrange
+      # max_id = Video.all.max_by(&:external_id).external_id
+      video_hash = {
+          title: "Alf the movie",
+          overview: "The most early 90s movie of all time",
+          release_date: "2025-12-16"
+      }
+
+      # Assert
+      expect {
+        post videos_path, params: video_hash
+      }.must_change "Video.count", 1
+
+      must_respond_with :created
+    end
+
+    it "will respond with bad request and errors for an invalid movie" do
+      # Arrange
+      video_hash = {
+          title: "Alf the movie",
+          overview: "The most early 90s movie of all time",
+          release_date: "2025-12-16"
+      }
+
+      video_hash[:title] = nil
+
+      # Assert
+      expect {
+        post videos_path, params: video_hash
+      }.wont_change "Video.count"
+      body = JSON.parse(response.body)
+
+      expect(body.keys).must_include "errors"
+      expect(body["errors"].keys).must_include "title"
+      expect(body["errors"]["title"]).must_include "can't be blank"
+
+      must_respond_with :bad_request
+    end
+  end
 end
