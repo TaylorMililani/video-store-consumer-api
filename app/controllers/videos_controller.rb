@@ -21,7 +21,25 @@ class VideosController < ApplicationController
       )
   end
 
+  def create
+    @video = Video.new(title: params[:title],
+                       overview: params[:overview],
+                       release_date: params[:release_date],
+                       image_url: params[:image_url],
+                       external_id: params[:external_id])
+    if Video.find_by(params[:external_id])
+      render status: :bad_request, json: { error: { external_api: ["This video is already in your library"] } }
+    else
+      @video.save
+      render status: :ok
+    end
+  end
+
   private
+
+  def video_params
+    params.permit(:title, :overview, :release_date, :image_url, :external_id)
+  end
 
   def require_video
     @video = Video.find_by(title: params[:title])

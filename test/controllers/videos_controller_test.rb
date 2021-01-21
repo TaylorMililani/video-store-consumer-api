@@ -77,4 +77,26 @@ class VideosControllerTest < ActionDispatch::IntegrationTest
       expect(data["errors"]).must_include "title"
     end
   end
+
+  # describe "create" do
+  #   it "creates a new movie and adds it to db" do
+  #     # Arrange
+  #     video_hash = {
+  #         # video: {
+  #         title: "Alf the movie",
+  #         overview: "The most early 90s movie of all time",
+  #         release_date: "2025-12-16",
+  #         image_url: "image",
+  #         external_id: 9000
+  #         # }
+  #     }
+  #
+  #     # Assert
+  #     expect {
+  #       post videos_path, params: video_hash
+  #     }.must_change "Video.count", 1
+  #
+  #     must_respond_with :ok
+  #   end
+  # end
 end
