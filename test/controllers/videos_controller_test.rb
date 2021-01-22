@@ -79,14 +79,17 @@ class VideosControllerTest < ActionDispatch::IntegrationTest
   end
 
   describe "create" do
+    let(:video_hash) {
+      {
+        title: "Alf the movie",
+        overview: "The most early 90s movie of all time",
+        release_date: '2025-12-16'
+      }
+    }
+
     it "creates a new movie and adds it to db" do
       # Arrange
       # max_id = Video.all.max_by(&:external_id).external_id
-      video_hash = {
-          title: "Alf the movie",
-          overview: "The most early 90s movie of all time",
-          release_date: "2025-12-16"
-      }
 
       # Assert
       expect {
@@ -98,12 +101,6 @@ class VideosControllerTest < ActionDispatch::IntegrationTest
 
     it "will respond with bad request and errors for an invalid movie" do
       # Arrange
-      video_hash = {
-          title: "Alf the movie",
-          overview: "The most early 90s movie of all time",
-          release_date: "2025-12-16"
-      }
-
       video_hash[:title] = nil
 
       # Assert
